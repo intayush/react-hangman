@@ -4,7 +4,7 @@ import PlayerDataResponse from "../typings/PlayerData";
 
 const usePlayerData = () => {
   const [isLoading, setIsLoading] = useState<boolean>(true);
-  const [error, setError] = useState<string>("");
+  const [errorCode, setErrorCode] = useState<number>(0);
   const [currentSessionId, setCurrentSessionId] = useState<string>("");
   const [currentWord, setCurrentWord] = useState<string[]>([]);
   const [numberOfMoves, setNumberOfMoves] = useState<number>(0);
@@ -19,8 +19,7 @@ const usePlayerData = () => {
       const {
         data: { sessionId, wordArray, movesCount, incorrectLetters },
         status,
-      } = (await axios.get("move", {
-        //baseURL: "http://radiant-shore-53074.herokuapp.com/api/",
+      } = (await axios.get("api/move", {
         params: {
           sessionId: localSessionId,
           move,
@@ -45,20 +44,33 @@ const usePlayerData = () => {
     } catch (error) {
       if (error.response?.status === 404) {
         /*If session id does not exist on server get a new one */
-        const {
-          data: { sessionId, wordArray, movesCount },
-        } = (await axios.get("move")) as AxiosResponse<PlayerDataResponse>;
-        setCurrentSessionId(sessionId);
-        setCurrentWord(wordArray);
-        setNumberOfMoves(movesCount);
-        localStorage.setItem("HANGMAN_SESSION_ID", sessionId);
+        try {
+          const {
+            data: { sessionId, wordArray, movesCount },
+          } = (await axios.get(
+            "api/move"
+          )) as AxiosResponse<PlayerDataResponse>;
+          setCurrentSessionId(sessionId);
+          setCurrentWord(wordArray);
+          setNumberOfMoves(movesCount);
+          setIsLoading(false);
+          localStorage.setItem("HANGMAN_SESSION_ID", sessionId);
+        } catch (error) {
+          typeof error === "object"
+            ? setErrorCode(Number(error.response?.status ?? 0))
+            : setErrorCode(500);
+          setIsLoading(false);
+        }
+      } else {
+        typeof error === "object"
+          ? setErrorCode(Number(error.response?.status ?? 0))
+          : setErrorCode(500);
+        setIsLoading(false);
       }
-      setError(error);
-      setIsLoading(false);
     }
   }, [
     setIsLoading,
-    setError,
+    setErrorCode,
     setCurrentSessionId,
     setCurrentWord,
     setNumberOfMoves,
@@ -74,6 +86,7 @@ const usePlayerData = () => {
     currentMove: string;
     reset: boolean;
   }) => {
+    errorCode!==0 && setErrorCode(0);
     setReset(reset);
     setMove(currentMove);
   };
@@ -85,7 +98,7 @@ const usePlayerData = () => {
   return {
     move,
     isLoading,
-    error,
+    errorCode,
     sessionId: currentSessionId,
     wordArray: currentWord,
     wrongLetters,

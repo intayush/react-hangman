@@ -5,9 +5,8 @@ interface HangmanProps {
   moves: number;
   gameOver: boolean;
 }
-
 const Hangman = ({ moves, gameOver }: HangmanProps) => {
-  const isWinner = gameOver && moves<6;
+  const isWinner = gameOver && moves < 6;
   return (
     <HangmanWrapper>
       <Svg x="0px" y="0px" viewBox="0 0 236 330">
@@ -85,6 +84,7 @@ const Hangman = ({ moves, gameOver }: HangmanProps) => {
           y2="218.7"
         ></Line>
         <Circle
+          data-testid="hangmanHead"
           greyed={moves < 1}
           hidden={isWinner}
           cx="139.4"
@@ -212,7 +212,6 @@ const Hangman = ({ moves, gameOver }: HangmanProps) => {
     </HangmanWrapper>
   );
 };
-
 
 const HangmanWrapper = styled.div`
   display: flex;

@@ -26,6 +26,7 @@ const Keyboard = ({
             return (
               <Key
                 key={`_alpha_${index}`}
+                data-testid={`_alpha_${index}`}
                 onClick={() =>
                   letterClickHandler({
                     letter,

@@ -3,11 +3,13 @@ import styled from "styled-components";
 interface ModalProps {
   isVisible: boolean;
   winner: boolean;
+  errorCode: number;
   closeHandler: () => void;
 }
 
-const Modal = ({ isVisible, winner, closeHandler }: ModalProps) => {
-  const message = winner ? "You have won :)" : "You have lost :(";
+const Modal = ({ isVisible, winner, closeHandler, errorCode }: ModalProps) => {
+  let message = winner && errorCode===0 ? "You have won :)" : "You have lost :(";
+  message = errorCode!==0 ? `Server returned a ${errorCode} error. Please Try again` : message; 
   return (
     <>
       {isVisible && (
@@ -17,7 +19,7 @@ const Modal = ({ isVisible, winner, closeHandler }: ModalProps) => {
               <ModalContent>
                 <h2>{message}</h2>
                 <PlayAgainButton onClick={closeHandler}>
-                  Play Again
+                  {errorCode!==0 ? "Try Again" : "Play Again"}
                 </PlayAgainButton>
               </ModalContent>
             </ModalBody>

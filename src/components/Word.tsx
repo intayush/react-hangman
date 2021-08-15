@@ -46,8 +46,8 @@ const Letter = styled.span<{
   color: #fff;
   vertical-align: top;
   margin-left: 4px;
-  height: 2ex;
-  line-height: 2ex;
+  height: 1.3em;
+  line-height: 1.3em;
   text-align: center;
   overflow: hidden;
   border-color: ${({ visible }) => (visible ? "none" : "#fff")};

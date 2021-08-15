@@ -12,7 +12,7 @@ import Modal from "./components/Modal";
 function App() {
   const {
     isLoading,
-    error,
+    errorCode,
     wordArray,
     wrongLetters,
     numberOfMoves,
@@ -20,13 +20,22 @@ function App() {
   } = usePlayerData();
 
   useEffect(() => {
-      setIsModalOpen(!!wordArray.length && (!wordArray.includes("") || numberOfMoves>5));
-  }, [wordArray, numberOfMoves])
+    setIsModalOpen(
+      !!wordArray.length && (!wordArray.includes("") || numberOfMoves > 5)
+    );
+  }, [wordArray, numberOfMoves]);
+
+  useEffect(() => {
+    errorCode !== 0 && setIsModalOpen(true);
+  }, [errorCode]);
 
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
-  const letterClickHandler = useCallback(({ letter }: { letter: string }) => {
-    dispatchMove({ currentMove: letter, reset: false });
-  }, [dispatchMove]);
+  const letterClickHandler = useCallback(
+    ({ letter }: { letter: string }) => {
+      dispatchMove({ currentMove: letter, reset: false });
+    },
+    [dispatchMove]
+  );
 
   const resetHandler = useCallback(() => {
     dispatchMove({ currentMove: "", reset: true });
@@ -55,8 +64,9 @@ function App() {
           </FlexWrapper>
         </ControlsdWrapper>
         <Modal
+          errorCode={errorCode}
           isVisible={isModalOpen}
-          winner={numberOfMoves<5}
+          winner={numberOfMoves < 5}
           closeHandler={playAgainHandler}
         ></Modal>
       </>

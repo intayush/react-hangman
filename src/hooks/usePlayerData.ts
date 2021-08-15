@@ -20,7 +20,7 @@ const usePlayerData = () => {
         data: { sessionId, wordArray, movesCount, incorrectLetters },
         status,
       } = (await axios.get("move", {
-        baseURL: "http://radiant-shore-53074.herokuapp.com/api/",
+        //baseURL: "http://radiant-shore-53074.herokuapp.com/api/",
         params: {
           sessionId: localSessionId,
           move,
@@ -43,7 +43,7 @@ const usePlayerData = () => {
         setIsLoading(false);
       }
     } catch (error) {
-      if (error.response.status === 404) {
+      if (error.response?.status === 404) {
         /*If session id does not exist on server get a new one */
         const {
           data: { sessionId, wordArray, movesCount },

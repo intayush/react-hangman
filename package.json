@@ -43,6 +43,7 @@
       "last 1 safari version"
     ]
   },
+  "proxy": "http://radiant-shore-53074.herokuapp.com/api/",
   "devDependencies": {
     "react-devtools": "4"
   }

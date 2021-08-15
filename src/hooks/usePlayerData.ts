@@ -19,12 +19,12 @@ const usePlayerData = () => {
       const {
         data: { sessionId, wordArray, movesCount, incorrectLetters },
         status,
-      } = (await axios.get("move", {
+      } = (await axios.get("api/move", {
         baseURL:
           process.env.NODE_ENV === "development"
             ? undefined
             : process.env.REACT_APP_API_URL ??
-              "http://radiant-shore-53074.herokuapp.com/api/",
+              "http://radiant-shore-53074.herokuapp.com/",
         params: {
           sessionId: localSessionId,
           move,
